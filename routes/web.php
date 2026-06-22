@@ -7,34 +7,21 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| YOUR TASK — register the routes
-|--------------------------------------------------------------------------
-| The five controllers imported above are already written for you. Your job
-| is to wire each one up with a full set of CRUD routes.
-|
-| Every controller has these methods: index, create, store, edit, update,
-| destroy  (there is NO `show` method). The quickest way to register all of
-| them at once is Route::resource().
-|
-| IMPORTANT: the controllers redirect to route names such as
-| 'students.index', so the resource name MUST match this list exactly:
-|
-|     departments  ->  DepartmentController
-|     students     ->  StudentController
-|     courses      ->  CourseController
-|     professors   ->  ProfessorController
-|     enrollments  ->  EnrollmentController
-|
-| TODO:
-|   1. Add a route for '/' (e.g. redirect to one of the modules).
-|   2. Register a resource route for each of the five controllers.
-|      Remember to exclude 'show'.
-|
-| One worked example — write the other four yourself:
-|
-|     // Route::resource('departments', DepartmentController::class)->except('show');
-*/
+// Auth Routes
+Route::get('/login', fn() => view('auth.login'))->name('login.form');
+Route::get('/register', fn() => view('auth.register'))->name('register');
+Route::get('/password/reset', fn() => view('auth.login'))->name('password.request');
 
-// TODO: write your routes below this line.
+Route::post('/login', function () {
+    return redirect()->route('departments.index');
+})->name('login');
+
+// Redirect root
+Route::get('/', fn() => redirect()->route('login.form'));
+
+// Resources
+Route::resource('departments', DepartmentController::class)->except('show');
+Route::resource('students', StudentController::class)->except('show');
+Route::resource('courses', CourseController::class)->except('show');
+Route::resource('professors', ProfessorController::class)->except('show');
+Route::resource('enrollments', EnrollmentController::class)->except('show');

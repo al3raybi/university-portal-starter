@@ -18,3 +18,8 @@
 
     TODO: build the component here.
 --}}
+
+
+{{-- resources/views/components/from-input.blade.php --}}
+@props(['name', 'label', 'type' => 'text', 'placeholder' => '', 'value' => '', 'autofocus' => false, 'required' => false])
+

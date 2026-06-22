@@ -13,3 +13,7 @@
 
     TODO: build the component here.
 --}}
+
+{{-- resources/views/components/card.blade.php --}}
+@props(['type' => 'form']) {{-- نوع الكارد: إما form أو table --}}
+
