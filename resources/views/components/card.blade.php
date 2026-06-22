@@ -17,3 +17,18 @@
 {{-- resources/views/components/card.blade.php --}}
 @props(['type' => 'form']) {{-- نوع الكارد: إما form أو table --}}
 
+@props([
+    'action' => '#',
+    'method' => 'POST',
+])
+
+<div class="form-card">
+    <form method="POST" action="{{ $action }}" novalidate>
+        @csrf
+        @if (!in_array(strtoupper($method), ['GET', 'POST']))
+            @method($method)
+        @endif
+
+        {{ $slot }}
+    </form>
+</div>
