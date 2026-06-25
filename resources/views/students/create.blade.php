@@ -16,8 +16,8 @@
     For department_id, build a <select> by looping $departmentOptions:
         @foreach ($departmentOptions as $id => $name) ... @endforeach
 
-    TODO: build the form here.
---}}
+    TODO: build the form here.@extends('layouts.app')
+
 @extends('layouts.app')
 
 @section('content')

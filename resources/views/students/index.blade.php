@@ -154,4 +154,3 @@ document.addEventListener('DOMContentLoaded', function () {
     border-radius: 12px !important;
 }
 </style>
-@endsection
