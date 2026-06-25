@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', fn() => view('auth.login'))->name('login.form');
 Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::get('/password/reset', fn() => view('auth.login'))->name('password.request');
-=======
+
 Route::resource('courses', CourseController::class);
 
 
