@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
+Route::resource('courses', CourseController::class);
+
 /*
 |--------------------------------------------------------------------------
 | YOUR TASK — register the routes
