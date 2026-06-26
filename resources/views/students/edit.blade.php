@@ -16,64 +16,82 @@
 
     TODO: build the form here.
 --}}
-@extends('layouts.app')
+@extends('layouts.layout')
+
+@section('title', 'Edit Student — University Portal')
 
 @section('content')
-<div class="container" style="padding: 10px; font-family: 'Open Sans', sans-serif; width: 100%; max-width: 650px !important;">
-    
-    {{-- Header Panel --}}
-    <div style="margin-bottom: 25px; border-bottom: 1px solid rgba(201,168,76,0.2); padding-bottom: 15px;">
-        <h2 style="margin: 0; color: #FFFFFF; font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 700;">Edit Student Record</h2>
-        <p style="margin: 5px 0 0 0; color: #8A94A6; font-size: 13px;">Modify the existing student profile and department assignment</p>
+
+<div class="dept-page">
+
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <p class="page-eyebrow">Management</p>
+            <h1 class="page-title">Edit Student Record</h1>
+        </div>
+        <a href="{{ route('students.index') }}" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Back
+        </a>
     </div>
 
-    {{-- Form Container matching the dark navy and gold theme --}}
-    <div style="background: #162347; border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
-        <form action="{{ route('students.update', $student->getId()) }}" method="POST">
-            @csrf
-            @method('PUT')
-            
-            {{-- Student Number Input (NOW REQUIRED) --}}
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; color: #E2C06A; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; margin-bottom: 8px;">STUDENT NUMBER *</label>
-                <input type="text" name="student_number" value="{{ old('student_number', $student->getStudentNumber()) }}" required style="width: 100%; background: #0D1B3E; border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 10px 12px; color: #FFFFFF; font-size: 14px; box-sizing: border-box;">
-            </div>
+    {{-- Form Card --}}
+    <x-card
+        action="{{ route('students.update', $student->getId()) }}"
+        method="PUT"
+    >
 
-            {{-- Full Name Input --}}
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; color: #E2C06A; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; margin-bottom: 8px;">FULL NAME *</label>
-                <input type="text" name="name" value="{{ old('name', $student->getName()) }}" required style="width: 100%; background: #0D1B3E; border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 10px 12px; color: #FFFFFF; font-size: 14px; box-sizing: border-box;">
-            </div>
+        <x-form-input
+            name="student_number"
+            label="Student Number"
+            :value="$student->getStudentNumber()"
+            required
+        />
 
-            {{-- Email Address Input --}}
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; color: #E2C06A; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; margin-bottom: 8px;">EMAIL ADDRESS *</label>
-                <input type="email" name="email" value="{{ old('email', $student->getEmail()) }}" required style="width: 100%; background: #0D1B3E; border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 10px 12px; color: #FFFFFF; font-size: 14px; box-sizing: border-box;">
-            </div>
+        <x-form-input
+            name="name"
+            label="Full Name"
+            :value="$student->getName()"
+            required
+        />
 
-            {{-- Department Assignment Selection --}}
-            <div style="margin-bottom: 25px;">
-                <label style="display: block; color: #E2C06A; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; margin-bottom: 8px;">DEPARTMENT ASSIGNMENT (OPTIONAL)</label>
-                <select name="department_id" style="width: 100%; background: #0D1B3E; border: 1px solid rgba(201,168,76,0.2); border-radius: 6px; padding: 10px 12px; color: #FFFFFF; font-size: 14px; box-sizing: border-box; cursor: pointer;">
-                    <option value="" style="background: #0D1B3E; color: #8A94A6;">-- Select a Department (None) --</option>
+        <x-form-input
+            name="email"
+            label="Email Address"
+            type="email"
+            :value="$student->getEmail()"
+            required
+        />
+
+        <div class="form-group">
+            <label for="department_id">Department Assignment (Optional)</label>
+            <div class="input-wrapper">
+                <select name="department_id" id="department_id">
+                    <option value="">-- Select a Department (None) --</option>
                     @foreach ($departmentOptions as $id => $name)
-                        <option value="{{ $id }}" style="background: #0D1B3E; color: #FFFFFF;" {{ old('department_id', $student->getDepartmentId()) == $id ? 'selected' : '' }}>
+                        <option value="{{ $id }}" {{ old('department_id', $student->getDepartmentId()) == $id ? 'selected' : '' }}>
                             {{ $name }}
                         </option>
                     @endforeach
                 </select>
             </div>
+        </div>
 
-            {{-- Action Buttons --}}
-            <div style="display: flex; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; justify-content: flex-end;">
-                <a href="{{ route('students.index') }}" style="color: #CBD5E1; background: transparent; border: 1px solid rgba(255,255,255,0.15); padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 600; font-family: 'Montserrat', sans-serif; transition: 0.2s; display: inline-flex; align-items: center;">
-                    CANCEL
-                </a>
-                <button type="submit" style="background: linear-gradient(135deg, #C9A84C 0%, #A8893A 100%); color: #0D1B3E; border: none; padding: 10px 24px; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(201,168,76,0.15); transition: 0.2s;">
-                    UPDATE RECORD
-                </button>
-            </div>
-        </form>
-    </div>
+        <div class="form-actions">
+            <a href="{{ route('students.index') }}" class="btn-cancel">Cancel</a>
+            <x-button-primary type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Update Record
+            </x-button-primary>
+        </div>
+
+    </x-card>
+
 </div>
+
 @endsection

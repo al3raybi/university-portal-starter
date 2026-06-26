@@ -1,56 +1,66 @@
-@extends('layouts.app')
+@extends('layouts.layout')
+
+@section('title', 'Edit Course — University Portal')
 
 @section('content')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="container mt-5">
+<div class="dept-page">
 
-    <div class="card p-4 shadow-sm mx-auto" style="max-width: 600px;">
-        <h2 class="mb-4 text-center fw-bold text-dark">Edit Course Details</h2>
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('courses.update', $course->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Course Title</label>
-                <input type="text" name="title" class="form-control" value="{{ old('title', $course->title) }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Course Code</label>
-                <input type="text" name="code" class="form-control" value="{{ old('code', $course->code) }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Description</label>
-                <textarea name="description" class="form-control" rows="4">{{ old('description', $course->description) }}</textarea>
-            </div>
-
-            <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-warning px-4">Update Course</button>
-                <a href="{{ route('courses.index') }}" class="btn btn-secondary px-4">Cancel</a>
-            </div>
-        </form>
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <p class="page-eyebrow">Management</p>
+            <h1 class="page-title">Edit Course</h1>
+        </div>
+        <a href="{{ route('courses.index') }}" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Back
+        </a>
     </div>
 
-</body>
-</html>
+    {{-- Form Card --}}
+    <x-card
+        action="{{ route('courses.update', $course->getId()) }}"
+        method="PUT"
+    >
+
+        <x-form-input
+            name="title"
+            label="Course Title"
+            :value="$course->getTitle()"
+            required
+            autofocus
+        />
+
+        <x-form-input
+            name="course_code"
+            label="Course Code"
+            :value="$course->getCourseCode()"
+            required
+        />
+
+        <x-form-input
+            name="credit_hours"
+            label="Credit Hours"
+            type="number"
+            :value="$course->getCreditHours()"
+            required
+        />
+
+        <div class="form-actions">
+            <a href="{{ route('courses.index') }}" class="btn-cancel">Cancel</a>
+            <x-button-primary type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Update Course
+            </x-button-primary>
+        </div>
+
+    </x-card>
+
+</div>
+
 @endsection

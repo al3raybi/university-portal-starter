@@ -46,7 +46,7 @@ body {
 
 .header-inner {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 48px;
     height: 65px;
@@ -209,7 +209,7 @@ body {
 .site-main {
     flex: 1;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 40px 48px;
     display: flex;
@@ -222,7 +222,7 @@ body {
 .site-main > form,
 .site-main > div {
     width: 100%;
-    max-width: 650px;
+    max-width: 1400px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -240,7 +240,7 @@ body {
 
 .footer-inner {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 48px;
     display: flex;
@@ -274,7 +274,7 @@ body {
 ══════════════════════════════ */
 .dept-page {
     animation: fadeUp 0.4s ease both;
-    max-width: 560px;
+    max-width: 1400px;
 }
 
 @keyframes fadeUp {
@@ -471,6 +471,7 @@ body {
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
     transition: background 0.2s;
 }
 
@@ -489,6 +490,7 @@ body {
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
     transition: background 0.2s;
 }
 
@@ -516,7 +518,7 @@ body {
     background: rgba(22,35,71,0.6);
     border: 1px solid rgba(201,168,76,0.15);
     border-radius: 14px;
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 .dept-table {
@@ -555,13 +557,16 @@ body {
 }
 
 .td-id { color: var(--gray-text); width: 60px; }
-.td-name { font-weight: 600; color: var(--white); }
-.td-actions { width: 160px; }
+.td-name { font-weight: 600; color: var(--white); white-space: nowrap; }
 
+/* ── Actions cell: enough room for Edit + Delete, never clipped ── */
 .td-actions {
+    width: 230px;
+    white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-right: 28px;
 }
 
 .td-actions form { margin: 0; }
@@ -594,4 +599,51 @@ body {
         text-align: center;
         padding: 0 16px;
     }
+}
+
+/* ══════════════════════════════
+    SELECT (dropdown) — matches input fields
+══════════════════════════════ */
+.form-group select {
+    width: 100%;
+    padding: 12px 40px 12px 42px;
+    background-color: rgba(13, 27, 62, 0.6);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    border-radius: 10px;
+    color: var(--white);
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A94A6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.form-group select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+.form-group select option {
+    background: var(--navy);
+    color: var(--white);
+}
+
+/* ══════════════════════════════
+    NUMBER INPUT SPINNER (Credit Hours) — gold themed arrows
+══════════════════════════════ */
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+    height: 26px;
+    margin-right: 4px;
+    cursor: pointer;
+    /* black-out first, then recolor to gold (#C9A84C) */
+    filter: brightness(0) saturate(100%) invert(70%) sepia(31%)
+            saturate(640%) hue-rotate(3deg) brightness(90%) contrast(87%);
 }

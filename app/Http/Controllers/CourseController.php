@@ -2,74 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Services\CourseService;
-use App\DTO\CourseDTO;
+use App\Services\DepartmentService;
 use Illuminate\Http\Request;
 
+/**
+ * CourseController (Student 3).
+ */
 class CourseController extends Controller
 {
-    protected CourseService $courseService;
+    public function __construct(
+        private CourseService $courses,
+        private DepartmentService $departments,
+    ) {}
 
-    // حقن الـ Service داخل الـ Controller
-    public function __construct(CourseService $courseService)
-    {
-        $this->courseService = $courseService;
-    }
-
-    // 1. عرض كل الكورسات (Read)
     public function index()
     {
-        $courses = $this->courseService->getAllCourses();
-        return view('courses.index', compact('courses'));
+        return view('courses.index', [
+            'courses' => $this->courses->all(),
+        ]);
     }
 
-    // 2. عرض فورم الإضافة (Create Form)
     public function create()
     {
-        return view('courses.create');
+        return view('courses.create', [
+            'departmentOptions' => $this->departmentOptions(),
+        ]);
     }
 
-    // حفظ الكورس الجديد في قاعدة البيانات
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:courses,code',
-            'description' => 'nullable|string',
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'course_code' => ['required', 'string', 'max:20'],
+            'credit_hours' => ['required', 'integer', 'min:1', 'max:12'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
         ]);
 
-        $dto = CourseDTO::fromRequest($validated);
-        $this->courseService->createCourse($dto);
+        $this->courses->create($data);
 
-        return redirect()->route('courses.index')->with('success', 'تم إضافة الكورس بنجاح!');
+        return redirect()
+            ->route('courses.index')
+            ->with('success', 'Course created successfully.');
     }
 
-    // 3. عرض فورم التعديل (Update Form)
-    public function edit(Course $course)
+    public function edit(int $id)
     {
-        return view('courses.edit', compact('course'));
+        $course = $this->courses->find($id);
+        abort_unless($course, 404);
+
+        return view('courses.edit', [
+            'course' => $course,
+            'departmentOptions' => $this->departmentOptions(),
+        ]);
     }
 
-    // تحديث بيانات الكورس الفعلي
-    public function update(Request $request, Course $course)
+    public function update(Request $request, int $id)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:courses,code,' . $course->id,
-            'description' => 'nullable|string',
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'course_code' => ['required', 'string', 'max:20'],
+            'credit_hours' => ['required', 'integer', 'min:1', 'max:12'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
         ]);
 
-        $dto = CourseDTO::fromRequest($validated);
-        $this->courseService->updateCourse($course, $dto);
+        $this->courses->update($id, $data);
 
-        return redirect()->route('courses.index')->with('success', 'تم تحديث بيانات الكورس بنجاح!');
+        return redirect()
+            ->route('courses.index')
+            ->with('success', 'Course updated successfully.');
     }
 
-    // 4. حذف الكورس (Delete)
-    public function destroy(Course $course)
+    public function destroy(int $id)
     {
-        $this->courseService->deleteCourse($course);
-        return redirect()->route('courses.index')->with('success', 'تم حذف الكورس بنجاح!');
+        $this->courses->delete($id);
+
+        return redirect()
+            ->route('courses.index')
+            ->with('success', 'Course deleted successfully.');
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function departmentOptions(): array
+    {
+        return collect($this->departments->all())
+            ->mapWithKeys(fn ($dept) => [$dept->getId() => $dept->getName()])
+            ->all();
     }
 }

@@ -1,63 +1,86 @@
-@extends('layouts.app')
+@extends('layouts.layout')
+
+@section('title', 'Courses — University Portal')
 
 @section('content')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Management</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="container mt-5">
+<div class="dept-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Courses List</h2>
-        <a href="{{ route('courses.create') }}" class="btn btn-primary px-4">+ Add New Course</a>
+    {{-- Page Header --}}
+    <div class="page-header">
+        <div>
+            <p class="page-eyebrow">Management</p>
+            <h1 class="page-title">Courses</h1>
+        </div>
+        <x-button-primary href="{{ route('courses.create') }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add New Course
+        </x-button-primary>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
+    {{-- Success Alert --}}
+    @if (session('success'))
+        <div class="alert-success">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ session('success') }}
+        </div>
     @endif
 
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-hover table-striped align-middle mb-0">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Course Title</th>
-                    <th>Course Code</th>
-                    <th>Description</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($courses as $course)
+    {{-- Table --}}
+    <div class="table-card">
+        @if (count($courses) === 0)
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                <p>No courses available.</p>
+                <x-button-primary href="{{ route('courses.create') }}">
+                    Add First Course
+                </x-button-primary>
+            </div>
+        @else
+            <x-table>
+                <x-slot name="heading">
                     <tr>
-                        <td>{{ $course->id }}</td>
-                        <td class="fw-semibold">{{ $course->title }}</td>
-                        <td><span class="badge bg-secondary px-2 py-1">{{ $course->code }}</span></td>
-                        <td class="text-muted">{{ $course->description ?? 'No description provided' }}</td>
-                        <td class="text-center">
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                            
-                            <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this course?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                        <th>ID</th>
+                        <th>Course Title</th>
+                        <th>Course Code</th>
+                        <th>Credit Hours</th>
+                        <th>Department</th>
+                        <th>Actions</th>
+                    </tr>
+                </x-slot>
+
+                @foreach ($courses as $course)
+                    <tr>
+                        <td class="td-id">{{ $course->getId() }}</td>
+                        <td class="td-name">{{ $course->getTitle() }}</td>
+                        <td>{{ $course->getCourseCode() }}</td>
+                        <td>{{ $course->getCreditHours() }}</td>
+                        <td>{{ $course->getDepartmentName() ?? 'N/A' }}</td>
+                        <td class="td-actions">
+                            <x-button-edit
+                                href="{{ route('courses.edit', $course->getId()) }}"
+                                label="Edit"
+                            />
+                            <x-button-delete
+                                action="{{ route('courses.destroy', $course->getId()) }}"
+                                label="Delete"
+                                confirm="Are you sure you want to delete this course?"
+                            />
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">No courses available. Click "Add New Course" to create one.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                @endforeach
+            </x-table>
+        @endif
     </div>
 
-</body>
-</html>
+</div>
+
 @endsection
