@@ -45,8 +45,11 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('register') }}" class="auth-form" novalidate>
+        <form method="POST" action="{{ route('register') }}" class="auth-form" id="register-form" novalidate>
             @csrf
+
+            {{-- Hidden combined name (Controller expects "name") --}}
+            <input type="hidden" name="name" id="name" value="{{ old('name') }}">
 
             {{-- Name Row --}}
             <div class="form-row">
@@ -127,7 +130,6 @@
                         placeholder="Min. 8 characters"
                         required
                         autocomplete="new-password"
-                        id="password-strength-input"
                     >
                     <button type="button" class="toggle-password" aria-label="Toggle password">
                         <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -208,5 +210,14 @@
 </div>
 
 <script src="{{ asset('js/auth.js') }}"></script>
+
+{{-- Combine first + last name into the hidden "name" field before submit --}}
+<script>
+    document.getElementById('register-form').addEventListener('submit', function () {
+        var first = document.getElementById('first_name').value.trim();
+        var last  = document.getElementById('last_name').value.trim();
+        document.getElementById('name').value = (first + ' ' + last).trim();
+    });
+</script>
 </body>
 </html>
