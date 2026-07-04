@@ -1,20 +1,3 @@
-{{--
-    YOUR TASK (W10 + W13):  list every professor.
-
-    The controller passes in:
-        $professors  — an array of App\DTOs\ProfessorDTO
-
-    Each ProfessorDTO gives you:
-        getId(), getName(), getEmail(), getDepartmentId(), getDepartmentName()
-
-    Build a table (loop with @foreach) with, per row:
-        - an "Edit" link    -> route('professors.edit', $professor->getId())
-        - a "Delete" <form> (POST + @csrf + @method('DELETE'))
-              action -> route('professors.destroy', $professor->getId())
-    Plus a "New Professor" link -> route('professors.create').
-
-    TODO: build the view here.
---}}
 @extends('layouts.layout')
 
 @section('title', 'Professors — University Portal')
@@ -23,7 +6,6 @@
 
 <div class="dept-page">
 
-    {{-- Page Header --}}
     <div class="page-header">
         <div>
             <p class="page-eyebrow">Management</p>
@@ -31,25 +13,23 @@
         </div>
         <x-button-primary :href="route('professors.create')">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Add New Professor
         </x-button-primary>
     </div>
 
-    {{-- Success alert --}}
     @if (session('success'))
         <div class="alert-success">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- Table --}}
+    <x-search-box placeholder="Search professors..." />
+
     <div class="table-card">
         @if (count($professors) > 0)
             <x-table>
@@ -79,10 +59,7 @@
         @else
             <div class="empty-state">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
                 </svg>
                 <p>No professors yet. Click "Add New Professor" to create one.</p>
             </div>

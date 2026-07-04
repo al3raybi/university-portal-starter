@@ -1,22 +1,3 @@
-{{--
-    YOUR TASK (W10):  edit an enrollment (for example, to add a final grade).
-
-    The controller passes in:
-        $enrollment      — an App\DTOs\EnrollmentDTO (getters listed in enrollments/index)
-        $studentOptions  — an array of [id => name]
-        $courseOptions   — an array of [id => "CODE — Title"]
-
-    Submit with:
-        method="POST" + @csrf + @method('PUT')
-        action="{{ route('enrollments.update', $enrollment->getId()) }}"
-
-    Pre-select the current student ($enrollment->getStudentId()) and course
-    ($enrollment->getCourseId()), and pre-fill the grade ($enrollment->getGrade()).
-
-    Validated fields:  student_id, course_id, grade
-
-    TODO: build the form here.
---}}
 @extends('layouts.layout')
 
 @section('title', 'Edit Enrollment — University Portal')
@@ -25,7 +6,6 @@
 
 <div class="dept-page">
 
-    {{-- Page Header --}}
     <div class="page-header">
         <div>
             <p class="page-eyebrow">Management</p>
@@ -39,7 +19,6 @@
         </a>
     </div>
 
-    {{-- Form Card (PUT) --}}
     <x-card action="{{ route('enrollments.update', $enrollment->getId()) }}" method="PUT">
 
         {{-- Student --}}
@@ -96,7 +75,6 @@
             </svg>
         </x-form-input>
 
-        {{-- Actions --}}
         <div class="form-actions">
             <a href="{{ route('enrollments.index') }}" class="btn-cancel">Cancel</a>
             <x-button-primary type="submit">

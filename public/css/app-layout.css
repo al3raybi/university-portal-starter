@@ -647,3 +647,99 @@ body {
     filter: brightness(0) saturate(100%) invert(70%) sepia(31%)
             saturate(640%) hue-rotate(3deg) brightness(90%) contrast(87%);
 }
+
+/* ══════════════════════════════
+    TABLE SEARCH BOX
+══════════════════════════════ */
+.table-search {
+    position: relative;
+    margin-bottom: 18px;
+    max-width: 380px;
+}
+
+.table-search svg {
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    width: 18px;
+    height: 18px;
+    stroke: var(--gray-text);
+    pointer-events: none;
+}
+
+.table-search-input {
+    width: 100%;
+    padding: 11px 14px 11px 42px;
+    background: rgba(13, 27, 62, 0.6);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    border-radius: 10px;
+    color: var(--white);
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.table-search-input::placeholder {
+    color: rgba(138, 148, 166, 0.6);
+}
+
+.table-search-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+}
+
+.table-search-empty {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--gray-text);
+    padding-left: 4px;
+}
+
+/* ══════════════════════════════
+    LOGOUT BUTTON (nav)
+══════════════════════════════ */
+.nav-logout-form {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* make the <button> visually identical to the <a> nav-links */
+button.nav-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-text);
+    cursor: pointer;
+    line-height: 1;
+    white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+}
+
+button.nav-logout svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+button.nav-logout:hover {
+    color: #F08080;
+    background: rgba(224, 82, 82, 0.1);
+}
+
+button.nav-logout:hover svg {
+    stroke: #F08080;
+}

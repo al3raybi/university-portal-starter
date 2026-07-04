@@ -10,21 +10,17 @@ use Illuminate\Support\Facades\Route;
 
 
 // ── Auth: show forms (GET) ──
-Route::get('/login', fn() => view('auth.login'))->name('login.form');
-Route::get('/register', fn() => view('auth.register'))->name('register');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::get('/password/reset', fn() => view('auth.login'))->name('password.request');
 
 // ── Auth: handle submissions (POST) ──
-// NOTE: تأكّد أن اسم الدالة 'register' يطابق الدالة في AuthController التي تنشئ المستخدم.
 Route::post('/register', [AuthController::class, 'register'])->name('register.store');
-
-Route::post('/login', function () {
-    return redirect()->route('departments.index');
-})->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ── Dashboard ──
-// الـ AuthController يحوّل بعد التسجيل/الدخول إلى route('dashboard').
-// لا توجد صفحة dashboard مستقلة، فنوجّهه إلى قائمة الأقسام.
+// AuthController يحوّل بعد التسجيل/الدخول إلى route('dashboard').
 Route::get('/dashboard', fn() => redirect()->route('departments.index'))->name('dashboard');
 
 // Redirect root

@@ -1,25 +1,3 @@
-{{--
-    YOUR TASK (W10 + W13):  list every enrollment.
-
-    The controller passes in:
-        $enrollments  — an array of App\DTOs\EnrollmentDTO
-
-    Each EnrollmentDTO gives you:
-        getId(), getStudentId(), getCourseId(), getGrade(),
-        getStudentName(), getCourseTitle(), getCourseCode()
-
-    Show each enrollment in a readable way, e.g.
-        "Alice Johnson  —  Web Development (CS305)  —  grade: A"
-    Note getGrade() may be null (not graded yet).
-
-    Per row add:
-        - an "Edit" link    -> route('enrollments.edit', $enrollment->getId())
-        - a "Delete/Drop" <form> (POST + @csrf + @method('DELETE'))
-              action -> route('enrollments.destroy', $enrollment->getId())
-    Plus a "New Enrollment" link -> route('enrollments.create').
-
-    TODO: build the view here.
---}}
 @extends('layouts.layout')
 
 @section('title', 'Enrollments — University Portal')
@@ -28,7 +6,6 @@
 
 <div class="dept-page">
 
-    {{-- Page Header --}}
     <div class="page-header">
         <div>
             <p class="page-eyebrow">Management</p>
@@ -36,25 +13,23 @@
         </div>
         <x-button-primary :href="route('enrollments.create')">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Add New Enrollment
         </x-button-primary>
     </div>
 
-    {{-- Success alert --}}
     @if (session('success'))
         <div class="alert-success">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- Table --}}
+    <x-search-box placeholder="Search enrollments..." />
+
     <div class="table-card">
         @if (count($enrollments) > 0)
             <x-table>
@@ -72,7 +47,12 @@
                     <tr>
                         <td class="td-id">#{{ $enrollment->getId() }}</td>
                         <td class="td-name">{{ $enrollment->getStudentName() }}</td>
-                        <td>{{ $enrollment->getCourseTitle() }}</td>
+                        <td>
+                            {{ $enrollment->getCourseTitle() }}
+                            @if ($enrollment->getCourseCode())
+                                ({{ $enrollment->getCourseCode() }})
+                            @endif
+                        </td>
                         <td>{{ $enrollment->getGrade() ?: '—' }}</td>
                         <td class="td-actions">
                             <x-button-edit :href="route('enrollments.edit', $enrollment->getId())" />
@@ -84,10 +64,7 @@
         @else
             <div class="empty-state">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
                 </svg>
                 <p>No enrollments yet. Click "Add New Enrollment" to create one.</p>
             </div>
